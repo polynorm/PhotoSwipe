@@ -1,6 +1,6 @@
-/*! PhotoSwipe - v4.1.2 - 2017-04-05
+/*! PhotoSwipe - v4.1.2 - 2018-02-15
 * http://photoswipe.com
-* Copyright (c) 2017 Dmitry Semenov; */
+* Copyright (c) 2018 Dmitry Semenov; */
 (function (root, factory) { 
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
@@ -2888,6 +2888,19 @@ var _getItemAt,
 		var w = maxRes ? item.w : Math.round(item.w * item.fitRatio),
 			h = maxRes ? item.h : Math.round(item.h * item.fitRatio);
 		
+		// ensure correct aspect ratio
+		if(img.naturalHeight && img.naturalWidth) {
+			var newHeight = w * (img.naturalHeight / img.naturalWidth);
+			if(newHeight > h) {
+				var newWidth = h * (img.naturalWidth / img.naturalHeight);
+				img.style.marginLeft = (w - newWidth) / 2 + 'px';
+				w = newWidth;
+			} else {
+				img.style.marginTop = (h - newHeight) / 2 + 'px';
+				h = newHeight;
+			}
+		}
+		
 		if(item.placeholder && !item.loaded) {
 			item.placeholder.style.width = w + 'px';
 			item.placeholder.style.height = h + 'px';
@@ -3182,6 +3195,7 @@ _registerModule('Controller', {
 
 	}
 });
+
 
 /*>>items-controller*/
 
